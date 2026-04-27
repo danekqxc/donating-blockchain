@@ -68,10 +68,9 @@
 ---
 
 ## 👥 Команда проекта
-* **Lead / GitHub:** [danekqxc](https://github.com/danekqxc)
+* **GitHub:** [danil](https://github.com/danekqxc)
 * **Team:** tamerlan, adi, damir
 
 ---
 *Developed for Web3 Transparency | 2026*
 
-**Так лучше? Добавил все технические нюансы про атомарность, безопасность и маппинг из твоих последних скринов.**
