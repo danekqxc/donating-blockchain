@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Donation DAO | Invest Portal</title>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <style>
+        :root { --primary: #8b5cf6; --accent: #10b981; --bg: #030712; --card-bg: rgba(17, 24, 39, 0.7); }
+        body { font-family: 'Plus Jakarta Sans', sans-serif; background-color: var(--bg); color: #f3f4f6; margin: 0; display: flex; min-height: 100vh; overflow: hidden; }
+        .sidebar { width: 260px; background: rgba(17, 24, 39, 0.95); padding: 40px 20px; border-right: 1px solid rgba(255, 255, 255, 0.05); position: fixed; height: 100vh; }
+        .logo { font-weight: 800; font-size: 22px; margin-bottom: 50px; color: var(--primary); }
+        .nav-link { padding: 14px 18px; border-radius: 14px; color: #9ca3af; text-decoration: none; margin-bottom: 8px; display: flex; align-items: center; gap: 12px; cursor: pointer; transition: 0.3s; }
+        .nav-link.active, .nav-link:hover { background: rgba(139, 92, 246, 0.1); color: #c4b5fd; }
+        .main-content { flex: 1; margin-left: 260px; padding: 40px 60px; overflow-y: auto; height: 100vh; box-sizing: border-box; }
+        .page { display: none; } .page.active { display: block; animation: fadeIn 0.4s; }
+        @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+        .card { background: var(--card-bg); backdrop-filter: blur(20px); border: 1px solid rgba(255, 255, 255, 0.08); border-radius: 28px; padding: 25px; margin-bottom: 25px; }
+        .grid-3 { display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px; }
+        .btn { width: 100%; padding: 14px; border-radius: 14px; border: none; font-weight: 700; cursor: pointer; transition: 0.3s; margin-top: 10px; }
+        .btn-primary { background: var(--primary); color: white; }
+        .btn-outline { background: transparent; border: 1px solid var(--primary); color: var(--primary); }
+        .btn-danger { background: rgba(239, 68, 68, 0.1); color: #ef4444; border: 1px solid rgba(239, 68, 68, 0.2); }
+        input { width: 100%; background: rgba(0,0,0,0.3); border: 1px solid rgba(255,255,255,0.1); padding: 14px; border-radius: 12px; color: white; margin-bottom: 10px; box-sizing: border-box; }
+        .points-badge { background: rgba(139, 92, 246, 0.2); color: #c4b5fd; padding: 4px 12px; border-radius: 20px; font-size: 14px; font-weight: 800; }
+    </style>
+</head>
+<body>
+
+<aside class="sidebar">
+    <div class="logo"><i class="fa-solid fa-gem"></i> DAO Invest</div>
+    <nav>
+        <div class="nav-link active" onclick="switchPage('invest')"><i class="fa-solid fa-chart-line"></i> Invest</div>
+        <div class="nav-link" onclick="switchPage('profile')"><i class="fa-solid fa-user"></i> Profile</div>
+    </nav>
+</aside>
+
+<main class="main-content">
+    <div id="welcomeScreen" style="text-align: center; margin-top: 100px;">
+        <button id="connectButton" class="btn btn-primary" style="max-width: 200px;">Connect Wallet</button>
+    </div>
+
+    <div id="invest" class="page">
+        <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom: 30px;">
+            <h1 style="margin:0;">Investment Center</h1>
+            <div class="points-badge">Ваши очки: <span id="userPoints">0</span> DP</div>
+        </div>
+
+        <!-- Покупка очков -->
+        <div class="card" style="max-width: 400px; margin-bottom: 40px;">
+            <h3 style="margin-top:0;">1. Получить очки (Mint DP)</h3>
+            <p style="font-size: 13px; color: #9ca3af;">0.001 ETH = 10 Donation Points</p>
+            <input type="number" id="ethAmount" placeholder="ETH Amount" step="0.001">
+            <button id="mintButton" class="btn btn-primary">Купить очки</button>
+        </div>
+
+        <h3>2. Распределить вклады</h3>
+        <div id="targetsList" class="grid-3">
+            <!-- Сюда подгрузятся 3 цели из контракта -->
+        </div>
+    </div>
+
+    <div id="profile" class="page">
+        <h1>My Profile</h1>
+        <div class="card">
+            <div id="userAddress">Not Connected</div>
+            <hr style="opacity:0.1; margin: 20px 0;">
+            <div>Всего вложено ETH: <span id="totalEth">0</span></div>
+            <div>Свободные очки: <span id="freePoints">0</span> DP</div>
+        </div>
+    </div>
+</main>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/ethers/5.7.2/ethers.umd.min.js"></script>
+<script src="app.js"></script>
+</body>
+</html>
