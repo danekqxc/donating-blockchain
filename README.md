@@ -48,4 +48,7 @@
 - Безопасный перевод средств через `call`.
 
 ---
-*Developed by [danekqxc](https://github.com/danekqxc)*
+*Developed by [danekqxc](https://github.com/danekqxc)
+tamerlan
+adi
+damir*
