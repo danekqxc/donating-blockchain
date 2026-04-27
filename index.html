@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Donation DAO | Invest Portal</title>
+    <title>Donation DAO | Web3 Portal</title>
     <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;800&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <style>
@@ -19,11 +19,16 @@
         .card { background: var(--card-bg); backdrop-filter: blur(20px); border: 1px solid rgba(255, 255, 255, 0.08); border-radius: 28px; padding: 25px; margin-bottom: 25px; }
         .grid-3 { display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px; }
         .btn { width: 100%; padding: 14px; border-radius: 14px; border: none; font-weight: 700; cursor: pointer; transition: 0.3s; margin-top: 10px; }
-        .btn-primary { background: var(--primary); color: white; }
-        .btn-outline { background: transparent; border: 1px solid var(--primary); color: var(--primary); }
+        .btn-primary { background: var(--primary); color: white; box-shadow: 0 10px 20px rgba(139, 92, 246, 0.3); }
         .btn-danger { background: rgba(239, 68, 68, 0.1); color: #ef4444; border: 1px solid rgba(239, 68, 68, 0.2); }
         input { width: 100%; background: rgba(0,0,0,0.3); border: 1px solid rgba(255,255,255,0.1); padding: 14px; border-radius: 12px; color: white; margin-bottom: 10px; box-sizing: border-box; }
         .points-badge { background: rgba(139, 92, 246, 0.2); color: #c4b5fd; padding: 4px 12px; border-radius: 20px; font-size: 14px; font-weight: 800; }
+
+        .log-table { width: 100%; border-collapse: collapse; }
+        .log-table th { text-align: left; padding: 12px; color: #6b7280; font-size: 13px; border-bottom: 1px solid rgba(255, 255, 255, 0.05); text-transform: uppercase; }
+        .log-table td { padding: 16px 12px; border-bottom: 1px solid rgba(255, 255, 255, 0.03); font-size: 14px; }
+        .hash-link { color: var(--primary-light); text-decoration: none; font-family: monospace; opacity: 0.7; }
+        .hash-link:hover { opacity: 1; }
     </style>
 </head>
 <body>
@@ -33,41 +38,71 @@
     <nav>
         <div class="nav-link active" onclick="switchPage('invest')"><i class="fa-solid fa-chart-line"></i> Invest</div>
         <div class="nav-link" onclick="switchPage('profile')"><i class="fa-solid fa-user"></i> Profile</div>
+        <div class="nav-link" onclick="switchPage('explorer')"><i class="fa-solid fa-database"></i> Explorer</div>
     </nav>
 </aside>
 
 <main class="main-content">
     <div id="welcomeScreen" style="text-align: center; margin-top: 100px;">
-        <button id="connectButton" class="btn btn-primary" style="max-width: 200px;">Connect Wallet</button>
+        <h1 style="font-size: 40px; font-weight: 800; margin-bottom: 30px;">Web3 Governance Portal</h1>
+        <button id="connectButton" class="btn btn-primary" style="max-width: 250px; margin: 0 auto;">Connect Wallet</button>
     </div>
 
+    <!-- Invest Page -->
     <div id="invest" class="page">
         <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom: 30px;">
             <h1 style="margin:0;">Investment Center</h1>
-            <div class="points-badge">Ваши очки: <span id="userPoints">0</span> DP</div>
+            <div class="points-badge">Баланс: <span id="userPoints">0</span> DP</div>
         </div>
 
-        <!-- Покупка очков -->
-        <div class="card" style="max-width: 400px; margin-bottom: 40px;">
-            <h3 style="margin-top:0;">1. Получить очки (Mint DP)</h3>
-            <p style="font-size: 13px; color: #9ca3af;">0.001 ETH = 10 Donation Points</p>
-            <input type="number" id="ethAmount" placeholder="ETH Amount" step="0.001">
-            <button id="mintButton" class="btn btn-primary">Купить очки</button>
+        <div class="card" style="max-width: 450px; border-left: 4px solid var(--primary);">
+            <h3 style="margin:0 0 10px 0;">1. Покупка очков (Mint DP)</h3>
+            <p style="font-size: 13px; color: #9ca3af; margin-bottom: 20px;">За каждые 0.001 ETH вы получаете 10 очков.</p>
+            <input type="number" id="ethAmount" placeholder="ETH (напр. 0.001)" step="0.001">
+            <button id="mintButton" class="btn btn-primary">Получить DP</button>
         </div>
 
-        <h3>2. Распределить вклады</h3>
-        <div id="targetsList" class="grid-3">
-            <!-- Сюда подгрузятся 3 цели из контракта -->
+        <h3 style="margin: 40px 0 20px 0;">2. Распределение вкладов</h3>
+        <div id="targetsList" class="grid-3"></div>
+    </div>
+
+    <!-- Profile Page -->
+    <div id="profile" class="page">
+        <h1 style="margin-bottom: 30px;">Contributor Profile</h1>
+        <div class="card">
+            <div style="font-size: 14px; color: #6b7280; margin-bottom: 5px;">Wallet Address</div>
+            <div id="userAddress" style="font-weight: 700; margin-bottom: 25px; word-break: break-all;">Not Connected</div>
+
+            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px;">
+                <div style="background: rgba(255,255,255,0.03); padding: 20px; border-radius: 20px;">
+                    <div style="font-size: 11px; color: #6b7280; text-transform: uppercase;">Total Invested ETH</div>
+                    <div style="font-size: 24px; font-weight: 800; margin-top: 5px;"><span id="totalEth">0</span> ETH</div>
+                </div>
+                <div style="background: rgba(255,255,255,0.03); padding: 20px; border-radius: 20px;">
+                    <div style="font-size: 11px; color: #6b7280; text-transform: uppercase;">Free Voting Power</div>
+                    <div style="font-size: 24px; font-weight: 800; margin-top: 5px; color: var(--primary-light);"><span id="freePoints">0</span> DP</div>
+                </div>
+            </div>
         </div>
     </div>
 
-    <div id="profile" class="page">
-        <h1>My Profile</h1>
+    <!-- Explorer Page -->
+    <div id="explorer" class="page">
+        <h1 style="margin-bottom: 30px;">Transaction Explorer</h1>
         <div class="card">
-            <div id="userAddress">Not Connected</div>
-            <hr style="opacity:0.1; margin: 20px 0;">
-            <div>Всего вложено ETH: <span id="totalEth">0</span></div>
-            <div>Свободные очки: <span id="freePoints">0</span> DP</div>
+            <table class="log-table">
+                <thead>
+                    <tr>
+                        <th>Действие</th>
+                        <th>Пользователь</th>
+                        <th>Хэш транзакции</th>
+                        <th>Статус</th>
+                    </tr>
+                </thead>
+                <tbody id="logsTableBody">
+                    <!-- Сюда падают логи -->
+                </tbody>
+            </table>
         </div>
     </div>
 </main>
